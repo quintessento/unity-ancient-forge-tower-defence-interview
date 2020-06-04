@@ -152,8 +152,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 7577324009426626682, guid: 530182aaaf989f444833d42faa8b16b7,
     type: 3}
-  towerPrefab: {fileID: 8481531145051783542, guid: 25d0f396843308e46a1c35b076505faf,
-    type: 3}
+  towerPrefabs:
+  - {fileID: 8481531145051783542, guid: 25d0f396843308e46a1c35b076505faf, type: 3}
+  - {fileID: 8481531145051783542, guid: 5d53f43839657be4081afdda37eda0a9, type: 3}
   boundsMin: {x: -12, y: -8}
   boundsMax: {x: 12, y: 13}
   enemySpawnRate: 1

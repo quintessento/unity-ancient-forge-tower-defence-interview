@@ -8,7 +8,7 @@
     {
         [Header("Prefabs")] 
         [SerializeField] private GameObject enemyPrefab;
-        [SerializeField] private GameObject towerPrefab;
+        [SerializeField] private GameObject[] towerPrefabs;
 
         [Header("Settings")] 
         [SerializeField] private Vector2 boundsMin;
@@ -40,15 +40,11 @@
 
             if (Input.GetMouseButtonDown(0))
             {
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                if (Physics.Raycast(ray, out var hit, LayerMask.GetMask("Ground")))
-                {
-                    var spawnPosition = hit.point;
-                    spawnPosition.y = towerPrefab.transform.position.y;
-
-                    SpawnTower(spawnPosition);
-                }
+                TrySpawnTowerOnGround(0);
+            }
+            else if (Input.GetMouseButtonDown(1))
+            {
+                TrySpawnTowerOnGround(1);
             }
 
             scoreText.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
@@ -72,9 +68,25 @@
             score++;
         }
 
-        private void SpawnTower(Vector3 position)
+        private bool TrySpawnTowerOnGround(int towerPrefabIndex)
         {
-            var tower = Instantiate(towerPrefab, position, Quaternion.identity).GetComponent<SimpleTower>();
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out var hit, LayerMask.GetMask("Ground")))
+            {
+                var spawnPosition = hit.point;
+                spawnPosition.y = towerPrefabs[towerPrefabIndex].transform.position.y;
+
+                SpawnTower(towerPrefabIndex, spawnPosition);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void SpawnTower(int towerPrefabIndex, Vector3 position)
+        {
+            var tower = Instantiate(towerPrefabs[towerPrefabIndex], position, Quaternion.identity).GetComponent<Tower>();
             tower.Initialize(enemies);
         }
     }

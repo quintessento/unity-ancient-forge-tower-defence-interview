@@ -78,10 +78,10 @@
                 spawnPosition.y = towerPrefabs[towerPrefabIndex].transform.position.y;
 
                 SpawnTower(towerPrefabIndex, spawnPosition);
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         private void SpawnTower(int towerPrefabIndex, Vector3 position)

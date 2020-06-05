@@ -218,8 +218,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49b7f9452a8418042ab05ef734d788d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 7251337396528109554, guid: e705c0d1bd7184140a4707621f2e64b9,
+  bulletPrefab: {fileID: -9149692060118113871, guid: e705c0d1bd7184140a4707621f2e64b9,
     type: 3}
   bulletSpawnPoint: {fileID: 5809919413682724424}
   firingRate: 5
-  firingRange: 4
+  firingRange: 8
+  numShots: 3
+  shotInterval: 0.25

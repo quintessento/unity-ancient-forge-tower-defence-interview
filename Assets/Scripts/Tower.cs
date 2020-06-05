@@ -5,7 +5,7 @@
 
     public abstract class Tower : MonoBehaviour
     {
-        [SerializeField] protected GameObject bulletPrefab;
+        [SerializeField] protected Bullet bulletPrefab;
         [SerializeField] protected Transform bulletSpawnPoint;
         [SerializeField] private float firingRate;
         [SerializeField] private float firingRange;
@@ -24,14 +24,25 @@
 
         protected abstract void Fire();
 
+        protected virtual void FaceTarget()
+        {
+            if (targetEnemy != null)
+            {
+                TurnToTarget(targetEnemy.transform.position);
+            }
+        }
+
+        protected void TurnToTarget(Vector3 targetPosition)
+        {
+            var lookRotation = Quaternion.LookRotation(targetPosition - transform.position);
+            transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, lookRotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        }
+
         private void Update()
         {
             targetEnemy = FindClosestEnemy();
-            if (targetEnemy != null)
-            {
-                var lookRotation = Quaternion.LookRotation(targetEnemy.transform.position - transform.position);
-                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, lookRotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            }
+
+            FaceTarget();
 
             fireTimer -= Time.deltaTime;
             if (fireTimer <= 0f)

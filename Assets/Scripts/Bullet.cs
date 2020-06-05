@@ -2,25 +2,39 @@
 {
     using UnityEngine;
 
-    public class Bullet : MonoBehaviour
+    public abstract class Bullet : MonoBehaviour
     {
-        [SerializeField] private float speed;
+        [SerializeField] protected float speed;
         [SerializeField] private float autoDestroyDelay = 2f;
 
-        private GameObject targetObject;
+        protected Vector3 direction;
+        protected Vector3 velocity;
 
-        private Vector3 direction;
+        protected GameObject targetObject;
 
-        public void Initialize(GameObject target)
+        public float Speed => speed;
+
+        public void Initialize(GameObject target, Vector3 initialDirection)
         {
             targetObject = target;
+            direction = initialDirection;
+            velocity = direction * speed;
         }
+
+        protected abstract void UpdateDirection();
+        protected abstract void UpdatePosition();
 
         private void Update()
         {
+            //check if the bullet has moved under ground, destroy it if that's the case
+            if(transform.position.y < -0.1f)
+            {
+                Destroy(gameObject);
+            }
+
             if (targetObject != null)
             {
-                direction = (targetObject.transform.position - transform.position).normalized;
+                UpdateDirection();
 
                 if ((transform.position - targetObject.transform.position).magnitude <= 0.2f)
                 {
@@ -30,8 +44,8 @@
             }
             else
             {
-                //enemy has already been destroyed by another tower, initiate self-destruction based on timer or checking when we go unseen under the ground
-                if(autoDestroyDelay > 0f && transform.position.y >= -0.1f)
+                //enemy has already been destroyed by another tower, initiate self-destruction based on timer
+                if(autoDestroyDelay > 0f)
                 {
                     autoDestroyDelay -= Time.deltaTime;
                 }
@@ -41,7 +55,7 @@
                 }
             }
 
-            transform.position += direction * speed * Time.deltaTime;
+            UpdatePosition();
         }
     }
 }

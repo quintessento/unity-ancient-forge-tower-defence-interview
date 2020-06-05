@@ -16,8 +16,8 @@
         [SerializeField] private float enemySpawnRate;
 
         [Header("UI")] 
-        [SerializeField] private GameObject enemiesCountText;
-        [SerializeField] private GameObject scoreText;
+        [SerializeField] private TextMeshProUGUI enemiesCountText;
+        [SerializeField] private TextMeshProUGUI scoreText;
         
         private List<Enemy> enemies;
         private float enemySpawnTimer;
@@ -26,6 +26,11 @@
         private void Awake()
         {
             enemies = new List<Enemy>();
+        }
+
+        private void Start()
+        {
+            UpdateScoreCounters();
         }
 
         private void Update()
@@ -46,9 +51,6 @@
             {
                 TrySpawnTowerOnGround(1);
             }
-
-            scoreText.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
-            enemiesCountText.GetComponent<TextMeshProUGUI>().text = "Enemies: " + enemies.Count;
         }
 
         private void SpawnEnemy()
@@ -60,12 +62,22 @@
             enemy.Initialize(boundsMin, boundsMax);
 
             enemies.Add(enemy);
+
+            UpdateScoreCounters();
         }
 
         private void Enemy_OnEnemyDied(Enemy enemy)
         {
             enemies.Remove(enemy);
             score++;
+
+            UpdateScoreCounters();
+        }
+
+        private void UpdateScoreCounters()
+        {
+            scoreText.text = "Score: " + score;
+            enemiesCountText.text = "Enemies: " + enemies.Count;
         }
 
         private bool TrySpawnTowerOnGround(int towerPrefabIndex)
